@@ -18,6 +18,8 @@ The migration command creates `var/app.db` automatically. There is no separate d
 
 **The scheduler is intentionally unfinished.** Some scheduler tests fail initially, so `composer setup` exits with a test failure after installation and migrations succeed. Ingestion and functional API tests should pass.
 
+Test runs show readable scenario names with pass/fail markers. A summary at the end repeats only scenarios with failures, errors, or other issues, making it easier to see what still needs attention. This applies to both `composer test` and `php bin/phpunit`.
+
 Run the API locally:
 
 ```sh

@@ -2,6 +2,7 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.5/phpunit.xsd"
          bootstrap="tests/bootstrap.php" colors="true" cacheDirectory=".phpunit.cache"
+         testdox="true" testdoxSummary="true"
          failOnWarning="true" failOnRisky="true">
     <php>
         <env name="SHELL_VERBOSITY" value="-1"/>
