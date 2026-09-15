@@ -61,11 +61,11 @@ php bin/phpunit tests/Functional/EventControllerTest.php
 
 ## API
 
-| Endpoint | Behavior |
-| --- | --- |
-| `POST /api/events/preview` | Returns `{"events": [...]}` from the scheduler; persists nothing. |
-| `POST /api/events` | Stores events and returns the number newly accepted, e.g. `{"accepted": 4}`. |
-| `GET /api/customers/{customerId}/events` | Returns `{"events": [...]}` ordered by creation time, oldest first. |
+| Endpoint                                 | Behavior                                                                     |
+| ---------------------------------------- | ---------------------------------------------------------------------------- |
+| `POST /api/events/preview`               | Returns `{"events": [...]}` from the scheduler; persists nothing.            |
+| `POST /api/events`                       | Stores events and returns the number newly accepted, e.g. `{"accepted": 4}`. |
+| `GET /api/customers/{customerId}/events` | Returns `{"events": [...]}` ordered by creation time, oldest first.          |
 
 Both POST endpoints accept `{"events": [...]}`. Empty batches are valid. Each event must contain a non-empty string `event_id` and `customer_id` (up to 255 characters), an integer `priority` from 1–5, an ISO-8601 `created_at` with an explicit timezone, and `payload` (any JSON value, including null). Invalid batches return JSON with HTTP 400.
 
@@ -103,7 +103,7 @@ curl -X POST http://localhost:8000/api/events/preview \
         "payload": {"type":"refund.created"}
       }
     ]
-  }'
+  }' | jq
 ```
 
 Once the scheduler is implemented, the returned IDs should be `evt_a1, evt_a2, evt_b1, evt_a3`.
@@ -111,5 +111,5 @@ Once the scheduler is implemented, the returned IDs should be `evt_a1, evt_a2, e
 To persist the same batch, change the URL to `/api/events`. Retrieve it with:
 
 ```sh
-curl http://localhost:8000/api/customers/customer_a/events
+curl http://localhost:8000/api/customers/customer_a/events | jq
 ```
