@@ -38,7 +38,18 @@ The server listens at `http://localhost:8000`. Stop it with Ctrl+C.
 
 You have two tasks. You may modify production code and tests. Please think aloud while working.
 
-### Task 1 — Event scheduling
+### Task 1 — Review event ingestion
+
+Review `src/Service/EventIngestService.php`.
+
+Originally webhook batches contained fewer than 10 events. Production now occasionally sends batches containing **10,000 events**. Identify potential performance issues and improve the implementation if appropriate.
+
+```sh
+php bin/phpunit tests/Service/EventIngestServiceTest.php
+php bin/phpunit tests/Functional/EventControllerTest.php
+```
+
+### Task 2 — Event scheduling
 
 Implement `src/Service/EventScheduler.php`.
 
@@ -57,17 +68,6 @@ php bin/phpunit tests/Service/EventSchedulerTest.php
 ```
 
 You are encouraged to explain your approach and complexity while working.
-
-### Task 2 — Review event ingestion
-
-Review `src/Service/EventIngestService.php`.
-
-Originally webhook batches contained fewer than 10 events. Production now occasionally sends batches containing **10,000 events**. Identify potential performance issues and improve the implementation if appropriate.
-
-```sh
-php bin/phpunit tests/Service/EventIngestServiceTest.php
-php bin/phpunit tests/Functional/EventControllerTest.php
-```
 
 ## API
 
