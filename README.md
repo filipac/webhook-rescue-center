@@ -21,8 +21,18 @@ The migration command creates `var/app.db` automatically. There is no separate d
 Run the API locally:
 
 ```sh
-php -S localhost:8000 -t public public/index.php
+composer serve
 ```
+
+The server listens at `http://localhost:8000`. Stop it with Ctrl+C.
+
+| Command                                                 | Purpose                                                    |
+| ------------------------------------------------------- | ---------------------------------------------------------- |
+| `composer setup`                                        | Install dependencies, migrate the database, and run tests. |
+| `composer serve`                                        | Start the local API server.                                |
+| `composer migrate`                                      | Apply pending database migrations.                         |
+| `composer test`                                         | Run the full test suite.                                   |
+| `composer test -- tests/Service/EventSchedulerTest.php` | Run only the scheduler tests.                              |
 
 ## Practical exercise
 

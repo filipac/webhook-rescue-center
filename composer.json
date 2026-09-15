@@ -42,9 +42,14 @@
     "scripts": {
         "setup": [
             "@composer install",
-            "@php bin/console doctrine:migrations:migrate --no-interaction",
-            "@php bin/phpunit"
+            "@migrate",
+            "@test"
         ],
-        "test": "php bin/phpunit"
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php -S localhost:8000 -t public public/index.php"
+        ],
+        "migrate": "@php bin/console doctrine:migrations:migrate --no-interaction",
+        "test": "@php bin/phpunit"
     }
 }
