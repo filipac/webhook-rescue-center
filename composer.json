@@ -51,6 +51,6 @@
         ],
         "migrate": "@php bin/console doctrine:migrations:migrate --no-interaction",
         "test": "@php bin/phpunit",
-        "preview": "curl --fail --silent --show-error -H 'Content-Type: application/json' --data-binary @examples/events.json --write-out '\\n' http://localhost:8000/api/events/preview"
+        "preview": "curl --fail --silent --show-error -H 'Content-Type: application/json' --data-binary @examples/events.json --write-out '\\n' http://localhost:8000/api/events/preview | jq"
     }
 }

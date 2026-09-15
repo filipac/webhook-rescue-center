@@ -86,7 +86,7 @@ With `composer serve` running in another terminal, preview the sample batch:
 composer preview
 ```
 
-The command posts [examples/events.json](examples/events.json) to `/api/events/preview` and prints the JSON response without persisting anything. Edit that file to try different events.
+The command posts [examples/events.json](examples/events.json) to `/api/events/preview` and formats the JSON response with `jq` without persisting anything. This command requires `curl` and `jq`. Edit that file to try different events.
 
 Once the scheduler is implemented, the returned IDs should be `evt_a1, evt_a2, evt_b1, evt_a3`.
 
