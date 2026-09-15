@@ -40,6 +40,11 @@
         "sort-packages": true
     },
     "scripts": {
+        "setup": [
+            "@composer install",
+            "@php bin/console doctrine:migrations:migrate --no-interaction",
+            "@php bin/phpunit"
+        ],
         "test": "php bin/phpunit"
     }
 }

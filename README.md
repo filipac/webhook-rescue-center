@@ -9,14 +9,14 @@ Webhook Rescue Center receives events from third-party services. Deliveries can 
 Requirements: PHP **8.4.1+**, Composer, and PHP's `pdo_sqlite` extension (plus standard PHPUnit extensions such as DOM, XML, and mbstring). No additional services are required.
 
 ```sh
-composer install
-php bin/console doctrine:migrations:migrate --no-interaction
-php bin/phpunit
+composer setup
 ```
+
+This installs Composer dependencies, runs the database migrations, and runs PHPUnit, in that order.
 
 The migration command creates `var/app.db` automatically. There is no separate database-creation step for SQLite. Tests automatically migrate their own database at `var/test.db` and reset its events between tests; they do not change your development data.
 
-**The scheduler is intentionally unfinished.** Some scheduler tests fail initially. Ingestion and functional API tests should pass.
+**The scheduler is intentionally unfinished.** Some scheduler tests fail initially, so `composer setup` exits with a test failure after installation and migrations succeed. Ingestion and functional API tests should pass.
 
 Run the API locally:
 
