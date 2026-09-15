@@ -30,6 +30,7 @@ The server listens at `http://localhost:8000`. Stop it with Ctrl+C.
 | ------------------------------------------------------- | ---------------------------------------------------------- |
 | `composer setup`                                        | Install dependencies, migrate the database, and run tests. |
 | `composer serve`                                        | Start the local API server.                                |
+| `composer preview` | Send the sample batch to the preview endpoint. |
 | `composer migrate`                                      | Apply pending database migrations.                         |
 | `composer test`                                         | Run the full test suite.                                   |
 | `composer test -- tests/Service/EventSchedulerTest.php` | Run only the scheduler tests.                              |
@@ -45,8 +46,8 @@ Review `src/Service/EventIngestService.php`.
 Originally webhook batches contained fewer than 10 events. Production now occasionally sends batches containing **10,000 events**. Identify potential performance issues and improve the implementation if appropriate.
 
 ```sh
-php bin/phpunit tests/Service/EventIngestServiceTest.php
-php bin/phpunit tests/Functional/EventControllerTest.php
+composer test -- tests/Service/EventIngestServiceTest.php
+composer test -- tests/Functional/EventControllerTest.php
 ```
 
 ### Task 2 — Event scheduling
@@ -64,7 +65,7 @@ At every step, choose the highest-ranked event that is currently eligible. After
 For example, with `A1`, `A2`, `A3` at priority 5 for customer A, and `B1` at priority 4 for customer B, the order is `A1, A2, B1, A3` (assuming A1–A3 are already in timestamp order).
 
 ```sh
-php bin/phpunit tests/Service/EventSchedulerTest.php
+composer test -- tests/Service/EventSchedulerTest.php
 ```
 
 You are encouraged to explain your approach and complexity while working.
@@ -79,46 +80,25 @@ You are encouraged to explain your approach and complexity while working.
 
 Both POST endpoints accept `{"events": [...]}`. Empty batches are valid. Each event must contain a non-empty string `event_id` and `customer_id` (up to 255 characters), an integer `priority` from 1–5, an ISO-8601 `created_at` with an explicit timezone, and `payload` (any JSON value, including null). Invalid batches return JSON with HTTP 400.
 
+With `composer serve` running in another terminal, preview the sample batch:
+
 ```sh
-curl -X POST http://localhost:8000/api/events/preview \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "events": [
-      {
-        "event_id": "evt_a1",
-        "customer_id": "customer_a",
-        "priority": 5,
-        "created_at": "2026-09-15T10:00:00+00:00",
-        "payload": {"type":"payment.created"}
-      },
-      {
-        "event_id": "evt_a2",
-        "customer_id": "customer_a",
-        "priority": 5,
-        "created_at": "2026-09-15T10:01:00+00:00",
-        "payload": {"type":"payment.updated"}
-      },
-      {
-        "event_id": "evt_a3",
-        "customer_id": "customer_a",
-        "priority": 5,
-        "created_at": "2026-09-15T10:02:00+00:00",
-        "payload": {"type":"payment.completed"}
-      },
-      {
-        "event_id": "evt_b1",
-        "customer_id": "customer_b",
-        "priority": 4,
-        "created_at": "2026-09-15T10:03:00+00:00",
-        "payload": {"type":"refund.created"}
-      }
-    ]
-  }' | jq
+composer preview
 ```
+
+The command posts [examples/events.json](examples/events.json) to `/api/events/preview` and prints the JSON response without persisting anything. Edit that file to try different events.
 
 Once the scheduler is implemented, the returned IDs should be `evt_a1, evt_a2, evt_b1, evt_a3`.
 
-To persist the same batch, change the URL to `/api/events`. Retrieve it with:
+To persist the same sample batch:
+
+```sh
+curl --fail --silent --show-error http://localhost:8000/api/events \
+  -H 'Content-Type: application/json' \
+  --data-binary @examples/events.json
+```
+
+Retrieve it with:
 
 ```sh
 curl http://localhost:8000/api/customers/customer_a/events | jq
